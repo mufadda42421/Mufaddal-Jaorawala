@@ -4,15 +4,14 @@
  */
 
 import React, { useState } from 'react';
-import { Mail, Copy, Check, Send, ArrowUpRight, Github, Linkedin, Twitter, MessageSquare } from 'lucide-react';
+import { Mail, Copy, Check, Send, ArrowUpRight, Github, Youtube } from 'lucide-react';
 import { PortfolioProfile } from '../types/portfolio';
 
 interface ContactProps {
   profile: PortfolioProfile;
-  onOpenCustomizer?: () => void;
 }
 
-export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) => {
+export const Contact: React.FC<ContactProps> = ({ profile }) => {
   const [copied, setCopied] = useState(false);
   const [subject, setSubject] = useState('');
   const [message, setMessage] = useState('');
@@ -26,7 +25,7 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
   const handleSendDraft = (e: React.FormEvent) => {
     e.preventDefault();
     const mailtoUrl = `mailto:${profile.email}?subject=${encodeURIComponent(
-      subject || 'Hello from Portfolio'
+      subject || 'Hello Mufaddal'
     )}&body=${encodeURIComponent(message)}`;
     window.location.href = mailtoUrl;
   };
@@ -46,7 +45,7 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
               Let's Connect & Collaborate
             </h2>
             <p className="text-slate-400 text-sm sm:text-base leading-relaxed max-w-xl mx-auto">
-              Whether you want to talk about coding, discuss technology, or connect, feel free to reach out directly to me.
+              Interested in discussing software development, project collaborations, or technology? Feel free to reach out directly to me.
             </p>
           </div>
 
@@ -66,7 +65,7 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
                     <Mail className="w-5 h-5" />
                   </div>
                   <div>
-                    <div className="text-xs font-mono text-slate-400">Direct Contact</div>
+                    <div className="text-xs font-mono text-slate-400">Direct Email</div>
                     <div className="text-base sm:text-lg font-semibold text-white font-mono break-all">
                       {profile.email}
                     </div>
@@ -102,10 +101,10 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
                 </div>
               </div>
 
-              {/* Quick Message Composer (triggers default email app via mailto) */}
+              {/* Quick Message Composer */}
               <form onSubmit={handleSendDraft} className="space-y-4">
                 <div className="text-xs font-mono text-slate-400">
-                  Quick Message Drafter
+                  Send a Message
                 </div>
                 
                 <div>
@@ -115,7 +114,7 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
                     type="text"
                     value={subject}
                     onChange={(e) => setSubject(e.target.value)}
-                    placeholder="Subject (e.g. Hello Mufaddal, Coding Collaboration)"
+                    placeholder="Subject (e.g. Collaboration on CreatorKit / Project Inquiry)"
                     className="w-full px-4 py-2.5 rounded-lg bg-slate-950/60 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/80 transition-colors"
                   />
                 </div>
@@ -127,14 +126,14 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
                     rows={4}
                     value={message}
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder="Write your message here... Clicking 'Compose Mail' will open your mail app with this draft ready to send to jaorawalamufaddal7@gmail.com."
+                    placeholder="Write your note or question here... Clicking 'Compose Email' will open your default email app with this message addressed to jaorawalamufaddal7@gmail.com."
                     className="w-full px-4 py-3 rounded-lg bg-slate-950/60 border border-white/10 text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/80 transition-colors resize-none"
                   />
                 </div>
 
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-slate-500">
-                    Sends to: {profile.email}
+                    Recipient: {profile.email}
                   </span>
                   
                   <button
@@ -147,39 +146,35 @@ export const Contact: React.FC<ContactProps> = ({ profile, onOpenCustomizer }) =
                 </div>
               </form>
 
-              {/* Social Links Area */}
+              {/* Social Channels */}
               <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                 <div className="text-xs text-slate-400 font-mono">
-                  {profile.socialLinks && profile.socialLinks.length > 0
-                    ? "Configured Profiles"
-                    : "Social Profiles: None configured yet"}
+                  Official Channels
                 </div>
 
-                {profile.socialLinks && profile.socialLinks.length > 0 ? (
-                  <div className="flex items-center gap-3">
-                    {profile.socialLinks.map((link) => (
-                      <a
-                        key={link.url}
-                        href={link.url}
-                        target="_blank"
-                        rel="noreferrer"
-                        className="p-2 rounded-lg bg-slate-900 border border-white/5 text-slate-300 hover:text-white hover:border-blue-500/40 transition-colors text-xs inline-flex items-center gap-1.5"
-                      >
-                        <span>{link.label}</span>
-                        <ArrowUpRight className="w-3 h-3 text-slate-500" />
-                      </a>
-                    ))}
-                  </div>
-                ) : (
-                  onOpenCustomizer && (
-                    <button
-                      onClick={onOpenCustomizer}
-                      className="text-xs font-mono text-slate-400 hover:text-blue-400 transition-colors self-start sm:self-auto"
-                    >
-                      + Add GitHub / Social Profiles
-                    </button>
-                  )
-                )}
+                <div className="flex items-center gap-3">
+                  <a
+                    href="https://github.com/mufadda42421"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3.5 py-2 rounded-lg bg-slate-900 border border-white/10 text-slate-200 hover:text-white hover:border-blue-500/40 transition-colors text-xs inline-flex items-center gap-2"
+                  >
+                    <Github className="w-3.5 h-3.5" />
+                    <span>GitHub (@mufadda42421)</span>
+                    <ArrowUpRight className="w-3 h-3 text-slate-500" />
+                  </a>
+
+                  <a
+                    href="https://www.youtube.com/@intelligentcreativelabs-786"
+                    target="_blank"
+                    rel="noreferrer"
+                    className="px-3.5 py-2 rounded-lg bg-slate-900 border border-white/10 text-slate-200 hover:text-red-400 hover:border-red-500/40 transition-colors text-xs inline-flex items-center gap-2"
+                  >
+                    <Youtube className="w-3.5 h-3.5 text-red-500" />
+                    <span>YouTube (@intelligentcreativelabs-786)</span>
+                    <ArrowUpRight className="w-3 h-3 text-slate-500" />
+                  </a>
+                </div>
               </div>
 
             </div>

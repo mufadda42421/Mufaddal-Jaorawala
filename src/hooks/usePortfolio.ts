@@ -7,55 +7,41 @@ import { useState, useEffect } from 'react';
 import { PortfolioProfile, SkillItem, ProjectItem, AchievementItem, JourneyMilestone, SocialLink } from '../types/portfolio';
 import { INITIAL_PORTFOLIO_DATA } from '../data/portfolioData';
 
-const STORAGE_KEY = 'mufaddal_portfolio_custom_data_v1';
+const SECRET_STORAGE_KEY = 'mufaddal_portfolio_admin_v2';
 
 export function usePortfolio() {
   const [data, setData] = useState<PortfolioProfile>(() => {
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        return {
-          ...INITIAL_PORTFOLIO_DATA,
-          ...parsed,
-          // Ensure arrays are preserved
-          skills: Array.isArray(parsed.skills) ? parsed.skills : [],
-          projects: Array.isArray(parsed.projects) ? parsed.projects : [],
-          achievements: Array.isArray(parsed.achievements) ? parsed.achievements : [],
-          journey: Array.isArray(parsed.journey) ? parsed.journey : [],
-          socialLinks: Array.isArray(parsed.socialLinks) ? parsed.socialLinks : [],
-        };
+      if (typeof window !== 'undefined') {
+        const saved = localStorage.getItem(SECRET_STORAGE_KEY);
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          return {
+            ...INITIAL_PORTFOLIO_DATA,
+            ...parsed,
+            projects: Array.isArray(parsed.projects) ? parsed.projects : INITIAL_PORTFOLIO_DATA.projects,
+            skills: Array.isArray(parsed.skills) ? parsed.skills : INITIAL_PORTFOLIO_DATA.skills,
+            achievements: Array.isArray(parsed.achievements) ? parsed.achievements : INITIAL_PORTFOLIO_DATA.achievements,
+            journey: Array.isArray(parsed.journey) ? parsed.journey : INITIAL_PORTFOLIO_DATA.journey,
+            socialLinks: Array.isArray(parsed.socialLinks) ? parsed.socialLinks : INITIAL_PORTFOLIO_DATA.socialLinks,
+          };
+        }
       }
     } catch (e) {
-      console.warn('Failed to load portfolio cache from storage', e);
+      console.warn('Failed to read portfolio storage', e);
     }
     return INITIAL_PORTFOLIO_DATA;
   });
 
-  useEffect(() => {
+  const saveToStorage = (updated: PortfolioProfile) => {
+    setData(updated);
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(SECRET_STORAGE_KEY, JSON.stringify(updated));
+      }
     } catch (e) {
-      console.warn('Failed to save portfolio to local storage', e);
+      console.warn('Failed to save to secret storage', e);
     }
-  }, [data]);
-
-  const addSkill = (skill: Omit<SkillItem, 'id'>) => {
-    const newItem: SkillItem = {
-      ...skill,
-      id: 'skill_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
-    };
-    setData(prev => ({
-      ...prev,
-      skills: [...prev.skills, newItem]
-    }));
-  };
-
-  const removeSkill = (id: string) => {
-    setData(prev => ({
-      ...prev,
-      skills: prev.skills.filter(s => s.id !== id)
-    }));
   };
 
   const addProject = (project: Omit<ProjectItem, 'id'>) => {
@@ -63,17 +49,35 @@ export function usePortfolio() {
       ...project,
       id: 'proj_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
     };
-    setData(prev => ({
-      ...prev,
-      projects: [newItem, ...prev.projects]
-    }));
+    saveToStorage({
+      ...data,
+      projects: [newItem, ...data.projects]
+    });
   };
 
   const removeProject = (id: string) => {
-    setData(prev => ({
-      ...prev,
-      projects: prev.projects.filter(p => p.id !== id)
-    }));
+    saveToStorage({
+      ...data,
+      projects: data.projects.filter(p => p.id !== id)
+    });
+  };
+
+  const addSkill = (skill: Omit<SkillItem, 'id'>) => {
+    const newItem: SkillItem = {
+      ...skill,
+      id: 'skill_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
+    };
+    saveToStorage({
+      ...data,
+      skills: [...data.skills, newItem]
+    });
+  };
+
+  const removeSkill = (id: string) => {
+    saveToStorage({
+      ...data,
+      skills: data.skills.filter(s => s.id !== id)
+    });
   };
 
   const addAchievement = (achievement: Omit<AchievementItem, 'id'>) => {
@@ -81,17 +85,17 @@ export function usePortfolio() {
       ...achievement,
       id: 'ach_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
     };
-    setData(prev => ({
-      ...prev,
-      achievements: [newItem, ...prev.achievements]
-    }));
+    saveToStorage({
+      ...data,
+      achievements: [newItem, ...data.achievements]
+    });
   };
 
   const removeAchievement = (id: string) => {
-    setData(prev => ({
-      ...prev,
-      achievements: prev.achievements.filter(a => a.id !== id)
-    }));
+    saveToStorage({
+      ...data,
+      achievements: data.achievements.filter(a => a.id !== id)
+    });
   };
 
   const addJourneyMilestone = (milestone: Omit<JourneyMilestone, 'id'>) => {
@@ -99,30 +103,32 @@ export function usePortfolio() {
       ...milestone,
       id: 'jrn_' + Date.now() + '_' + Math.random().toString(36).substring(2, 6)
     };
-    setData(prev => ({
-      ...prev,
-      journey: [...prev.journey, newItem]
-    }));
+    saveToStorage({
+      ...data,
+      journey: [...data.journey, newItem]
+    });
   };
 
   const removeJourneyMilestone = (id: string) => {
-    setData(prev => ({
-      ...prev,
-      journey: prev.journey.filter(j => j.id !== id)
-    }));
+    saveToStorage({
+      ...data,
+      journey: data.journey.filter(j => j.id !== id)
+    });
   };
 
   const updateSocialLinks = (socialLinks: SocialLink[]) => {
-    setData(prev => ({
-      ...prev,
+    saveToStorage({
+      ...data,
       socialLinks
-    }));
+    });
   };
 
   const resetToDefaults = () => {
     setData(INITIAL_PORTFOLIO_DATA);
     try {
-      localStorage.removeItem(STORAGE_KEY);
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem(SECRET_STORAGE_KEY);
+      }
     } catch {
       // ignore
     }
@@ -134,10 +140,10 @@ export function usePortfolio() {
 
   return {
     profile: data,
-    addSkill,
-    removeSkill,
     addProject,
     removeProject,
+    addSkill,
+    removeSkill,
     addAchievement,
     removeAchievement,
     addJourneyMilestone,

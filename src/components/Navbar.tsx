@@ -7,12 +7,27 @@ import React, { useState, useEffect } from 'react';
 import { Menu, X, ArrowUpRight, Code2 } from 'lucide-react';
 
 interface NavbarProps {
-  onOpenCustomizer?: () => void;
+  onSecretTrigger?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenCustomizer }) => {
+export const Navbar: React.FC<NavbarProps> = ({ onSecretTrigger }) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [clickCount, setClickCount] = useState(0);
+
+  const handleLogoClick = (e: React.MouseEvent) => {
+    if (!onSecretTrigger) return;
+    const newCount = clickCount + 1;
+    if (newCount >= 5) {
+      e.preventDefault();
+      onSecretTrigger();
+      setClickCount(0);
+    } else {
+      setClickCount(newCount);
+      // Reset counter after 2.5 seconds if not clicked 5 times
+      setTimeout(() => setClickCount(0), 2500);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -35,7 +50,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCustomizer }) => {
     <header 
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         isScrolled 
-          ? 'bg-[#030712]/80 backdrop-blur-md border-b border-white/5 py-3.5 shadow-lg shadow-black/20' 
+          ? 'bg-[#030712]/85 backdrop-blur-md border-b border-white/5 py-3.5 shadow-lg shadow-black/30' 
           : 'bg-transparent py-5'
       }`}
     >
@@ -43,9 +58,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCustomizer }) => {
         {/* Strict Top Bar Contract: Zone 1 (Brand) - Zone 2 (Nav Links) - Zone 3 (Primary Action) */}
         <div className="flex items-center justify-between gap-8">
           
-          {/* Zone 1: Single text element wordmark */}
+          {/* Zone 1: Single text element wordmark with secret click trigger */}
           <a 
             href="#" 
+            onClick={handleLogoClick}
             className="flex items-center gap-2.5 text-slate-100 group whitespace-nowrap shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-md"
           >
             <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white shadow-md shadow-blue-500/20 group-hover:scale-105 transition-transform duration-200">
@@ -71,15 +87,6 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCustomizer }) => {
 
           {/* Zone 3: 1 primary action */}
           <div className="hidden md:flex items-center gap-3 shrink-0">
-            {onOpenCustomizer && (
-              <button
-                onClick={onOpenCustomizer}
-                className="px-3 py-1.5 text-xs font-mono text-slate-400 hover:text-blue-300 hover:bg-slate-800/60 rounded-md border border-white/5 transition-colors whitespace-nowrap"
-                title="Edit and manage your portfolio items"
-              >
-                Edit Portfolio
-              </button>
-            )}
             <a
               href="#contact"
               className="inline-flex items-center gap-1.5 px-4 py-2 text-xs font-semibold text-white bg-blue-600 hover:bg-blue-500 active:bg-blue-700 rounded-lg shadow-sm shadow-blue-600/30 transition-all duration-200 whitespace-nowrap shrink-0"
@@ -90,15 +97,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenCustomizer }) => {
           </div>
 
           {/* Mobile hamburger button */}
-          <div className="flex md:hidden items-center gap-2">
-            {onOpenCustomizer && (
-              <button
-                onClick={onOpenCustomizer}
-                className="px-2.5 py-1.5 text-xs font-mono text-slate-400 hover:text-white rounded border border-white/10"
-              >
-                Edit
-              </button>
-            )}
+          <div className="flex md:hidden items-center">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-slate-400 hover:text-white hover:bg-slate-800/50 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"

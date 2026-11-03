@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Brain, Code, Cpu, Hammer, Compass, Sparkles } from 'lucide-react';
+import { Brain, Code, Hammer, Compass, ExternalLink, Github, Youtube } from 'lucide-react';
 import { PortfolioProfile } from '../types/portfolio';
 
 interface AboutProps {
@@ -14,26 +14,26 @@ interface AboutProps {
 export const About: React.FC<AboutProps> = ({ profile }) => {
   const corePassions = [
     {
-      title: "Learning Programming",
-      description: "Constantly expanding knowledge of software concepts, syntax, data structures, and computer science fundamentals.",
-      icon: Code,
+      title: "Building Real Things",
+      description: "Shipped 7 live production web applications, 4 Chrome extensions, and desktop applications solving practical needs.",
+      icon: Hammer,
       accent: "text-blue-400"
     },
     {
-      title: "Building Real Things",
-      description: "Turning logic and creative ideas into functional programs, responsive websites, and practical developer utilities.",
-      icon: Hammer,
+      title: "Learning Programming",
+      description: "Constantly expanding knowledge of JavaScript, TypeScript, Python, modern UI libraries, and system programming.",
+      icon: Code,
       accent: "text-purple-400"
     },
     {
-      title: "Solving Complex Problems",
-      description: "Breaking down complex problems into clear, algorithmic steps and debugging challenges systematically.",
+      title: "Solving Problems & Automation",
+      description: "Developing intelligent helpers like J.A.R.V.I.S., custom terminal CLI tools, and tab/clipboard productivity extensions.",
       icon: Brain,
       accent: "text-cyan-400"
     },
     {
-      title: "Exploring Technology",
-      description: "Staying curious about how modern software powers our world—from web frameworks and operating systems to cloud tools.",
+      title: "Exploring Technology & Sharing",
+      description: "Experimenting with cutting-edge tools and documenting technical discoveries on Intelligent Creative Labs (@intelligentcreativelabs-786).",
       icon: Compass,
       accent: "text-indigo-400"
     }
@@ -52,13 +52,13 @@ export const About: React.FC<AboutProps> = ({ profile }) => {
             Driven by curiosity, powered by code.
           </h2>
           <p className="mt-4 text-slate-400 leading-relaxed text-base">
-            I am <strong className="text-white font-semibold">{profile.name}</strong>, a {profile.age}-year-old developer. Coding isn't just a hobby for me—it is my career interest and creative passion. I believe software engineering is one of the most powerful tools to think clearly, solve real-world problems, and build meaningful things.
+            I am <strong className="text-white font-semibold">{profile.name}</strong>, a {profile.age}-year-old developer. Coding is my career interest and creative passion. I enjoy learning programming, building functional applications, solving algorithmic problems, and exploring technology. To date, I have engineered and deployed 14 software projects across live web applications, Chrome extensions, and desktop tools.
           </p>
         </div>
 
         {/* 4 Core Pillars */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-          {corePassions.map((item, idx) => {
+          {corePassions.map((item) => {
             const Icon = item.icon;
             return (
               <div 
@@ -83,17 +83,39 @@ export const About: React.FC<AboutProps> = ({ profile }) => {
           })}
         </div>
 
-        {/* Philosophy / Mindset quote card */}
+        {/* Creator Channel & Developer Profile Strip */}
         <div className="mt-10 p-6 sm:p-8 rounded-2xl bg-gradient-to-r from-blue-950/30 via-purple-950/20 to-slate-950/40 border border-white/10 text-slate-300">
-          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <div>
-              <div className="text-xs font-mono text-slate-400">Core Focus</div>
-              <div className="text-base sm:text-lg font-medium text-white mt-1">
-                "Learning step-by-step with authentic understanding, write clean code, and never stop building."
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="space-y-1">
+              <div className="text-xs font-mono text-cyan-400">Intelligent Creative Labs</div>
+              <div className="text-base sm:text-lg font-semibold text-white">
+                Sharing programming projects & software builds with the developer community
               </div>
+              <p className="text-xs text-slate-400">
+                YouTube channel showcasing coding experiments, extension builds, and software creations.
+              </p>
             </div>
-            <div className="text-xs font-mono text-slate-400 whitespace-nowrap">
-              — Mufaddal Jaorawala
+            
+            <div className="flex items-center gap-3 shrink-0">
+              <a
+                href="https://www.youtube.com/@intelligentcreativelabs-786"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-white bg-red-600 hover:bg-red-500 rounded-lg transition-colors"
+              >
+                <Youtube className="w-4 h-4" />
+                <span>Visit YouTube</span>
+                <ExternalLink className="w-3 h-3 text-red-200" />
+              </a>
+              <a
+                href="https://github.com/mufadda42421"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2 text-xs font-semibold text-slate-200 bg-slate-900 hover:bg-slate-800 rounded-lg border border-white/10 transition-colors"
+              >
+                <Github className="w-4 h-4" />
+                <span>GitHub Profile</span>
+              </a>
             </div>
           </div>
         </div>

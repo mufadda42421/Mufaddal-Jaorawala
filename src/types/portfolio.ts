@@ -21,6 +21,7 @@ export interface SkillItem {
 export interface ProjectItem {
   id: string;
   title: string;
+  category: 'Websites' | 'Chrome Extensions' | 'Desktop Apps' | 'Personal Projects';
   description: string;
   technologies: string[];
   liveUrl?: string;
